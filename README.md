@@ -20,9 +20,9 @@
 Go 1.10 is required to build confd, which uses the new vendor directory.
 
 ```
-$ mkdir -p $GOPATH/src/github.com/kelseyhightower
-$ git clone https://github.com/kelseyhightower/confd.git $GOPATH/src/github.com/kelseyhightower/confd
-$ cd $GOPATH/src/github.com/kelseyhightower/confd
+$ mkdir -p $GOPATH/src/github.com/connectedservices
+$ git clone https://github.com/connectedservices/confd.git $GOPATH/src/github.com/connectedservices/confd
+$ cd $GOPATH/src/github.com/connectedservices/confd
 $ make
 ```
 

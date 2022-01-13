@@ -1,0 +1,46 @@
+---
+version: 2.1
+
+docker-auth: &docker-auth
+  auth:
+    username: $DOCKERHUB_USERNAME
+    password: $DOCKERHUB_PASSWORD
+
+jobs:
+  build:
+    docker:
+      - image: golang:1.13-alpine
+        <<: *docker-auth
+    working_directory: /go
+    steps:
+      - run:
+          name: Install dependencies
+          command: |
+            apk add -U zip make
+      - run:
+          name: Prepare dirs
+          command: |
+            mkdir -p src/github.com/connectedservices
+      - checkout:
+          path: confd
+      - run:
+          name: Build Go package
+          command: |
+            cd src/github.com/connectedservices/confd
+            make
+            ls bin/
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+          context: org-global
+      - approve_publish:
+          type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - master

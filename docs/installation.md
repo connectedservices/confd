@@ -55,10 +55,10 @@ ADD https://github.com/connectedservices/confd/archive/v${CONFD_VERSION}.tar.gz 
 RUN apk add --no-cache \
     bzip2 \
     make && \
-  mkdir -p /go/src/github.com/kelseyhightower/confd && \
-  cd /go/src/github.com/kelseyhightower/confd && \
+  mkdir -p /go/src/github.com/connectedservices/confd && \
+  cd /go/src/github.com/connectedservices/confd && \
   tar --strip-components=1 -zxf /tmp/v${CONFD_VERSION}.tar.gz && \
-  go install github.com/kelseyhightower/confd && \
+  go install github.com/connectedservices/confd && \
   rm -rf /tmp/v${CONFD_VERSION}.tar.gz
 
 FROM tomcat:8.5.15-jre8-alpine
