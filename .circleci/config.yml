@@ -30,7 +30,7 @@ jobs:
             make build
 
       - persist_to_workspace:
-          root: ./
+          root: src/github.com/connectedservices/confd/
           paths:
             - "bin/*"
 
@@ -45,7 +45,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            pip install awscli
+            apk add -U aws-cli
       - run:
           name: Publish artifact
           command: |
@@ -54,7 +54,7 @@ jobs:
             else
               VERSION=sha-${CIRCLE_SHA1::7}
             fi
-            aws s3 cp confd "s3://${ARTIFACTS_BUCKET}/confd/${VERSION}/confd_linux_amd64"
+            aws s3 cp bin/confd "s3://${ARTIFACTS_BUCKET}/confd/${VERSION}/confd"
 
 workflows:
   version: 2
