@@ -5,7 +5,7 @@ GIT_SHA=`git rev-parse --short HEAD || echo`
 build:
 	@echo "Building confd..."
 	@mkdir -p bin
-	GOOS=linux GOARCH=amd64 go build --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/confd .
+	GOOS=linux GOARCH=amd64 go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/confd .
 
 install:
 	@echo "Installing confd..."
