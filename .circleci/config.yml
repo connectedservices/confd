@@ -36,16 +36,15 @@ jobs:
 
   publish:
     docker:
-      - image: python:3.9-alpine
+      - image: alpine:3.15
         <<: *docker-auth
     steps:
-      - checkout
-      - attach_workspace:
-          at: ./
       - run:
           name: Install dependencies
           command: |
             apk add -U aws-cli
+      - attach_workspace:
+          at: ./
       - run:
           name: Publish artifact
           command: |
