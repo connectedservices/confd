@@ -9,13 +9,9 @@ docker-auth: &docker-auth
 jobs:
   build:
     docker:
-      - image: golang:1.17-alpine
+      - image: cimg/go:1.17.6
         <<: *docker-auth
     steps:
-      - run:
-          name: Install system dependencies
-          command: |
-            apk add -U zip make git
       - checkout
       - run:
           name: Get dependencies
@@ -25,7 +21,7 @@ jobs:
           name: Build
           command: |
             export GOOS=linux
-            export GOARCH=amd64 $(BUILD_CMD) -o $(OUTPUT)
+            export GOARCH=amd64
             go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/confd .
 
       #- run:
