@@ -22,7 +22,7 @@ require (
 	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce
 	github.com/hashicorp/serf v0.8.1
 	github.com/hashicorp/vault v0.10.1
-	github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8
+	github.com/jmespath/go-jmespath v0.4.0
 	github.com/kelseyhightower/memkv v0.1.1
 	github.com/mitchellh/go-homedir v0.0.0-20161203194507-b8bc1bf76747
 	github.com/mitchellh/mapstructure v0.0.0-20180220230111-00c29f56e238
@@ -33,10 +33,10 @@ require (
 	github.com/ugorji/go v1.1.1
 	github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77
 	golang.org/x/crypto v0.0.0-20180503215945-1f94bef427e3
-	golang.org/x/net v0.0.0-20180502164142-640f4622ab69
-	golang.org/x/sys v0.0.0-20180504064212-6f686a352de6
-	golang.org/x/text v0.3.0
+	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f
+	golang.org/x/sys v0.0.0-20210423082822-04245dca01da
+	golang.org/x/text v0.3.6
 	google.golang.org/genproto v0.0.0-20180427144745-86e600f69ee4
 	google.golang.org/grpc v1.11.3
-	gopkg.in/yaml.v2 v2.2.1
+	gopkg.in/yaml.v2 v2.2.8
 )
