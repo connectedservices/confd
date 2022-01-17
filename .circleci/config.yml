@@ -23,23 +23,10 @@ jobs:
             export GOOS=linux
             export GOARCH=amd64
             go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/confd .
-
-      #- run:
-      #    name: Prepare dirs
-      #    command: |
-      #      mkdir -p src/github.com/connectedservices
-      #- checkout:
-      #    path: src/github.com/connectedservices/confd
-      #- run:
-      #    name: Build Go package
-      #    command: |
-      #      cd src/github.com/connectedservices/confd
-      #      make build
-
-      #- persist_to_workspace:
-      #    root: src/github.com/connectedservices/confd/
-      #    paths:
-      #      - "bin/*"
+      - persist_to_workspace:
+          root: src/github.com/connectedservices/confd/
+          paths:
+            - "bin/*"
 
   publish:
     docker:
