@@ -22,7 +22,8 @@ jobs:
           command: |
             export GOOS=linux
             export GOARCH=amd64
-            go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/confd .
+            export VERSION=$(grep Version version.go |awk -F'=' '{print $2}' |tr -d ' "')
+            go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/${VERSION}/confd .
       - persist_to_workspace:
           root: ./
           paths:
@@ -42,12 +43,9 @@ jobs:
       - run:
           name: Publish artifact
           command: |
-            if [ -n "${CIRCLE_TAG+x}" ]; then
-              VERSION=${CIRCLE_TAG}
-            else
-              VERSION=sha-${CIRCLE_SHA1::7}
-            fi
-            aws s3 cp bin/confd "s3://${ARTIFACTS_BUCKET}/confd/${VERSION}/confd"
+            cd bin/
+            VERSION=$(basename *)
+            aws s3 cp bin/${VERSION}/confd "s3://${ARTIFACTS_BUCKET}/confd/${VERSION}/confd"
 
 workflows:
   version: 2
