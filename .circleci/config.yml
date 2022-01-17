@@ -24,7 +24,7 @@ jobs:
             export GOARCH=amd64
             go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/confd .
       - persist_to_workspace:
-          root: src/github.com/connectedservices/confd/
+          root: ./
           paths:
             - "bin/*"
 
