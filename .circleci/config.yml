@@ -14,25 +14,37 @@ jobs:
     working_directory: /go
     steps:
       - run:
-          name: Install dependencies
+          name: Install system dependencies
           command: |
             apk add -U zip make git
+      - checkout
       - run:
-          name: Prepare dirs
+          name: Get dependencies
           command: |
-            mkdir -p src/github.com/connectedservices
-      - checkout:
-          path: src/github.com/connectedservices/confd
+            go mod download
       - run:
-          name: Build Go package
+          name: Build
           command: |
-            cd src/github.com/connectedservices/confd
-            make build
+            export GOOS=linux
+            export GOARCH=amd64 $(BUILD_CMD) -o $(OUTPUT)
+            go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/confd .
 
-      - persist_to_workspace:
-          root: src/github.com/connectedservices/confd/
-          paths:
-            - "bin/*"
+      #- run:
+      #    name: Prepare dirs
+      #    command: |
+      #      mkdir -p src/github.com/connectedservices
+      #- checkout:
+      #    path: src/github.com/connectedservices/confd
+      #- run:
+      #    name: Build Go package
+      #    command: |
+      #      cd src/github.com/connectedservices/confd
+      #      make build
+
+      #- persist_to_workspace:
+      #    root: src/github.com/connectedservices/confd/
+      #    paths:
+      #      - "bin/*"
 
   publish:
     docker:
