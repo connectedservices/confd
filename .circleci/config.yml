@@ -27,7 +27,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - "bin/*"
+            - "bin/*/confd"
 
   publish:
     docker:
@@ -45,7 +45,7 @@ jobs:
           command: |
             cd bin/
             VERSION=$(basename *)
-            aws s3 cp bin/${VERSION}/confd "s3://${ARTIFACTS_BUCKET}/confd/${VERSION}/confd"
+            aws s3 cp ${VERSION}/confd "s3://${ARTIFACTS_BUCKET}/confd/${VERSION}/confd"
 
 workflows:
   version: 2
