@@ -1,0 +1,78 @@
+---
+version: 2.1
+
+docker-auth: &docker-auth
+  auth:
+    username: $DOCKERHUB_USERNAME
+    password: $DOCKERHUB_PASSWORD
+
+jobs:
+  build:
+    docker:
+      - image: cimg/go:1.17.6
+        <<: *docker-auth
+    steps:
+      - checkout
+      - run:
+          name: Get dependencies
+          command: |
+            go mod download
+      - run:
+          name: Build
+          command: |
+            export GOOS=linux
+            export GOARCH=amd64
+            export VERSION=$(grep Version version.go |awk -F'=' '{print $2}' |tr -d ' "')
+            go build -tags netgo --ldflags "-extldflags '-static' -X main.GitSHA=${GIT_SHA}" -o bin/${VERSION}/confd .
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - "bin/*/confd"
+
+  publish:
+    docker:
+      - image: alpine:3.15
+        <<: *docker-auth
+    steps:
+      - run:
+          name: Install dependencies
+          command: |
+            apk add -U aws-cli
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Publish artifact
+          command: |
+            cd bin/
+            VERSION=$(basename *)
+            aws s3 cp ${VERSION}/confd "s3://${ARTIFACTS_BUCKET}/confd/${VERSION}/confd"
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+          context: org-global
+      - approve_publish:
+          type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - master
+      - publish:
+          context: org-global
+          requires:
+            - approve_publish
+          filters:
+            branches:
+              ignore:
+                - master
+      - publish:
+          context: org-global
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
